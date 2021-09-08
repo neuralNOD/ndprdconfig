@@ -30,6 +30,21 @@ class DBConnection(object):
     :param port: Port at which the database is accessible. By default it connects to 3306 port for MySQL server,
                  and 1433 port for MSSQL server.
     :param db_name: Name of the database to connect to. Defaults to MySQL Server.
+
+    Example(s): The following can be used to understand the connect and run query for any type of database:
+
+    ```python
+      obj = DBConnection(username = "root", password = "admin", database = "dummy", port = 10002)
+      con = obj.connect()
+
+      result = con.execute("SELECT * FROM `table-name`")
+      for row in result:
+        print(row)
+
+      con.close()
+    ```
+
+    Configure other keyword arguments to control any other parameters.
     """
 
     def __init__( self, username : str, password : str, hostname : str = 'localhost', database : str = 'database', **kwargs):
