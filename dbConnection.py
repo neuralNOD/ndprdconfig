@@ -15,7 +15,22 @@ import pymssql
 import sqlalchemy as sa
 
 class DBConnection(object):
-    """Class to Connect to all the Popular Database using Python"""
+    """Class to Connect to all the Popular Database using Python
+
+    This is a general purpose connection object, that can be used to connect to any type of
+    database using `python` SQL connection libraries. Currently, the class is defined for MySQL and MSSQL Server,
+    but given the simplicity of the code, all different types of database can be easily controlled.
+
+    :param username: Username for connecting to the database.
+    :param password: Authenticationpassword.
+    :param hostname: Hostname IP address, defaults to `locahost`
+    :param database: Name of the database.
+
+    Keyword Arguments
+    :param port: Port at which the database is accessible. By default it connects to 3306 port for MySQL server,
+                 and 1433 port for MSSQL server.
+    :param db_name: Name of the database to connect to. Defaults to MySQL Server.
+    """
 
     def __init__( self, username : str, password : str, hostname : str = 'localhost', database : str = 'database', **kwargs):
         # default constructor
