@@ -95,27 +95,30 @@ class DBConnection(object):
         """
 
         self.instance = instance
-        
+        self.configfile = "database.yaml"
+
         if bypass_conf:
             # directly assign a value via keyword arguments
-            self.username = kwargs.get("username", None)
-            self.password = kwargs.get("password", None)
-            self.hostname = kwargs.get("hostname", None)
+            self.flavor = kwargs.get("flavor", "mysql")
+            self.driver = kwargs.get("driver", "pyodbc")
+
+            self.host = kwargs.get("host", "localhost")
+            self.port = kwargs.get("port", 3306) # default for mysql
+
+            self.username = kwargs.get("username", "root")
+            self.password = kwargs.get("password", "pass")
             self.database = kwargs.get("database", None)
         else:
             self.__read_config__(self.instance)
 
         # keyword arguments
-        self._db   = self.db_name(kwargs.get("db_name", "mysql"))
-        self._port = kwargs.get("port", self._default_ports(self._db))
-        self._conf = self._default_connectors(self._db) # default sa engine
+        self._conf = self.__engine_connectors__(self.flavor, self.driver) # default sa engine
 
 
     def __read_config__(self, instance : str) -> dict:
         from globals import CONFIG
 
-        fname = "database.yaml-proto"
-        with open(os.path.join(CONFIG, fname), "r") as f:
+        with open(os.path.join(CONFIG, self.configfile), "r") as f:
             config = yaml.load(f, Loader = yaml.FullLoader)
 
         config_data = config["configurations"][instance] # redundancy use
@@ -154,35 +157,26 @@ class DBConnection(object):
         return config
 
 
-    def db_name(self, name : str) -> str:
-        """Format DB-Name and Return - for Consistency"""
-
-        return name.lower()
-
-
-    def _default_ports(self, dbName : str) -> int:
-        # defines default port for populat db engines
-
-        return {
-            "mysql" : 3306,
-            "mssql" : 1433
-        }.get(dbName)
-
-
-    def _default_connectors(self, name : str) -> str:
+    def __engine_connectors__(self, flavor : str, driver : str) -> str:
         # defines the default connectors
 
-        return {
+        default_connectors = {
+            # requires additional library
             "mysql" : "mysql+pymysql",
             "mssql" : "mssql+pymssql"
-        }.get(name)
+        }
+        
+        if driver:
+            con_ = f"{flavor}+{driver}"
+
+        return con_ if driver else default_connectors.get(flavor, None)
 
 
     @property
-    def connectionString(self) -> str:
+    def connection_string(self) -> str:
         """General Connection String for any DB Connection"""
 
-        return f"{self.username}:{self.password}@{self.hostname}:{self._port}/{self.database}"
+        return f"{self.username}:{self.password}@{self.host}:{self.port}/{self.database}"
 
 
     @property
@@ -190,7 +184,7 @@ class DBConnection(object):
         # {connectors} + {connection string}
         # https://docs.sqlalchemy.org/en/14/core/engines.html
         
-        return f"{self._conf}://{self.connectionString}"
+        return f"{self._conf}://{self.connection_string}"
 
 
     @property
@@ -201,9 +195,3 @@ class DBConnection(object):
     def connect(self):
         connection = self.engine.connect()
         return connection
-    
-
-    def __repr__(self):
-        # representation
-
-        return f"Connecting to {self.connectionString}"
