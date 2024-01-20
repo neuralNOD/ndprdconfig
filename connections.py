@@ -116,7 +116,7 @@ class DBConnection(object):
 
 
     def __read_config__(self, instance : str) -> dict:
-        from globals import CONFIG
+        from .globals import CONFIG
 
         with open(os.path.join(CONFIG, self.configfile), "r") as f:
             config = yaml.load(f, Loader = yaml.FullLoader)

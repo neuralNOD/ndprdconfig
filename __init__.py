@@ -14,3 +14,5 @@ major functions are fetched directly by module import.
 
 @author:  nxlogics
 """
+
+from .connections import DBConnection # noqa: F401, F403
