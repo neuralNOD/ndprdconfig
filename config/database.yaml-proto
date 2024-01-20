@@ -1,0 +1,47 @@
+version: v0.0.1-proto
+
+about:
+    description: The default configuration file for database management.
+
+configurations:
+    # holds the database configurations, the key is the database instance name
+
+    localhost:
+        # ! define the flavors/variant of the database, oracle/mysql/etc.
+        flavor: mysql
+
+        # ! define the connection drivers protocol, pyodbc/pymysql/etc.
+        driver: pyodbc
+
+        # ! set global_path_variables: True to fetch values from path
+        # ! `global_path_variables` has precedence over indivual keys
+        # if set to true, the value is defined like:
+        # hostname = os.getenv(config[hostname]["hostname"])
+        # while, if set to false, the value is directly set like:
+        # hostname = config[hostname]["hostname"]
+        # also, there is an option to set individual values,
+        # this allows more control, by setting `path_variables`
+        global_path_variables: False
+
+        # ? define the hostname and portname for the database engine
+        host:
+            path_variables: True
+            value: hostname
+
+        port:
+            path_variables: False
+            value: portnumber
+
+        # ? authentication password for the database
+        username:
+            path_variables: False
+            value: root
+
+        password:
+            path_variables: False
+            value: admin
+
+        # ? dptionally define the default database name
+        database:
+            path_variables: False
+            value: database

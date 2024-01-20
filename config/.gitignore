@@ -1,6 +1,5 @@
 # Ignore all Configurations Files, by default the skeleton repository
-# stores a schema of the file with the extension like: `*.conf-proto`
-# thus, create your self copy, or deploy in any system as `*.conf`
+# stores a schema of the file with the extension like: `*.yaml-proto`
+# thus, create your self copy, or deploy in any system as `*.yaml`
 
-*.ini
-*.conf
+*.yaml

@@ -2,29 +2,24 @@
 
 <div align = "justify">
 
-The **`skeleton`** repository is configured to serve as a starting point for all the products and services related to this organization. The settings files are configured as the name `<file>.conf` and are ignored via the `.gitignore` files, while the repository stores the `<file>.conf-proto` to set up and quickly configure when moving systems.
+The **`skeleton`** repository is configured to serve as a starting point for all the products and services related to this organization. The settings files are configured as the name `<file>.yaml` and are ignored via the `.gitignore` files, while the repository stores the `<file>.yaml-proto` to set up and quickly configure when moving systems.
 
 ## Getting Started
 
-The [**`configparser`**](https://docs.python.org/3/library/configparser.html) is a core Python module that can handle configuration files like `*.ini` in Windows or `*.conf` for *nix systems. The file is read as an advanced `dict` that works as a wrapper on a variable. For example:
+The module uses the **`yaml`** file-format to save the configurations of the settings under the key `config["configurations"]`, while the file description, and header is stored (optionally, for the developers) information and file description. The global `version` key can be checked to find the appropriate version of the configuration file, and settings may indicate different versioning stying.
 
-```shell
-# usernames.conf
-[DEFAULT]
-  name = Debmalya Pramanik
+```yaml
+# file.yaml
+version: v0.0.1 # currently this denotes the file version
 
-[ADMINISTRATOR]
-  name = neuralNOD INC.
+about:
+  description: long-description about the file goes here
+
+configurations:
+  # key is the instance/search object name
+  key: values
 ```
 
-Using the `configparser`, we can wrap the "username" from the command line/application level as:
-
-```python
-from configparser import ConfigParser
-
-username = input("Select Username: ")
-configuration = ConfigParser().read("usernames.conf")
-print(configuration["name"])
-```
+The previously thought `.conf` and `.ini` file is ignored, as the configuration file does not properly allow indentation and sub-configuration settings that might be needed. The `yaml` file is treated as dictionary in `python` and allows all the dictionary handling abilities.
 
 </div>
