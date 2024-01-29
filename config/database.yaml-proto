@@ -45,3 +45,31 @@ configurations:
         database:
             path_variables: False
             value: database
+
+    # ? the above can be used as example/understanding, the blank
+    # configuration settings with variables are as follows:
+    instance:
+        flavor: mysql
+        driver: pymysql
+
+        global_path_variables: False
+
+        host:
+            path_variables: False
+            value: localhost
+
+        port:
+            path_variables: False
+            value: 3306
+        
+        username:
+            path_variables: False
+            value: root
+
+        password:
+            path_variables: False
+            value: admin
+
+        database:
+            path_variables: False
+            value: database
